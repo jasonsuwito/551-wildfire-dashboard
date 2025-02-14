@@ -29,6 +29,7 @@ The recipient is a policy maker with the Government of Canada who wants to evalu
 
 ## Appendix
 
+#### Data Features Description 
 The following table describes the features in the dataset derived from [CWFIS Datamart](https://cwfis.cfs.nrcan.gc.ca/datamart)
 
 | Feature      | Datatype | Description |
@@ -58,3 +59,9 @@ The following table describes the features in the dataset derived from [CWFIS Da
 | CFS_NOTE1   | String  | Additional note added by CFS when compiling the NFDB. |
 | CFS_NOTE2   | String  | Additional note added by CFS when compiling the NFDB. |
 | ACQ_DATE    | Date    | Date that fire data was acquired from agency |
+
+#### App Sketch Idea
+
+![sketch-1](images/sketch-1.jpg)
+
+![sketch-2](images/sketch-2.jpg)
