@@ -2,7 +2,7 @@
 
 **Name**: Amali Jayatileke, Kiran John, Kelsey Strachan, Jason Suwito
 
-**Published**: February 14, 2025
+**Published**: February 28, 2025
 
 ### Landing page `dashboard-app-landing.py` (Page 1)
 
