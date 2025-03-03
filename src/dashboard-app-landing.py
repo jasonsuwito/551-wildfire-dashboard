@@ -57,11 +57,9 @@ fig = px.choropleth(
 # Layout adjustments
 fig.update_layout(
     margin={"r":0, "t":0, "l":0, "b":0},
-    geo=dict(bgcolor='#0d0d0d'),
-    plot_bgcolor='#0d0d0d',
-    paper_bgcolor='#0d0d0d', 
-    height=900,
-    width=1300,
+    geo=dict(bgcolor='#060606'),
+    plot_bgcolor='#060606',
+    paper_bgcolor='#060606',
     showlegend=False,
     dragmode=False,
     autosize=True
@@ -69,12 +67,29 @@ fig.update_layout(
 
 # Map display settings
 fig.update_geos(
-    showcountries=False, showcoastlines=False, showland=False, 
-    showlakes=False, fitbounds="locations", subunitcolor='white'
+    showcountries=False, 
+    showcoastlines=False, 
+    showland=False, 
+    showlakes=False, 
+    subunitcolor='white',
+    center={"lat": 62, "lon": -90},
+    projection_scale=2.65
 )
 
 # Province border styling
-fig.update_traces(marker=dict(line=dict(color='white', width=0.15)))
+fig.update_traces(marker=dict(line=dict(color='white', width=0.2)))
+
+fig.add_trace(
+    go.Choropleth(
+        geojson=geojson_data,
+        locations=["British Columbia"],
+        z=[1], 
+        featureidkey="properties.name",
+        colorscale=[[0, "rgba(0, 0, 0, 0)"], [1, "rgba(0, 0, 0, 0)"]], 
+        marker=dict(line=dict(color="white", width=0.7)),
+        showscale=False,
+    )
+)
 
 # Add fire location points
 fig.add_trace(
@@ -89,14 +104,23 @@ fig.add_trace(
     )
 )
 
+
+
 # Initialize Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
 
 # Define app layout
 app.layout = html.Div(
-    style={'backgroundColor': '#0d0d0d', 'textAlign': 'center', 'padding': '0px', 'margin': '0px'},
+    style={
+        'backgroundColor': '#060606', 
+        'textAlign': 'center', 
+        'padding': '0px', 
+        'margin': '0px',
+        'height': '100vh',  
+        'width': '100vw',   
+        },
     children=[
-        dcc.Graph(figure=fig, config={'staticPlot': True})
+        dcc.Graph(figure=fig, config={'staticPlot': True}, style={'height': '100%', 'width': '100%'})
     ]
 )
 
