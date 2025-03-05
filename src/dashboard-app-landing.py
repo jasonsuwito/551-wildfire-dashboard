@@ -12,7 +12,7 @@ fires = pd.read_csv("../data/NFDB_point_20240613.txt")
 # Process data
 fire_map_data = fires[['FIRE_ID', 'SRC_AGENCY', 'LATITUDE', 'LONGITUDE', 'YEAR', 'SIZE_HA']]
 fire_map_data = fire_map_data[(fire_map_data['YEAR'] >= 2013) & (fire_map_data['YEAR'] <= 2023)].sort_values(by='YEAR', ascending=True)
-fire_map_data['SIZE_HA'] = fire_map_data['SIZE_HA'] * 100
+fire_map_data['SIZE_HA'] = fire_map_data['SIZE_HA']
 fire_map_data['color'] = "black"
 
 # Province abbreviation mapping
@@ -41,6 +41,9 @@ fire_map_data_filtered = fire_map_data[
     (fire_map_data['LATITUDE'] >= 41) & (fire_map_data['LATITUDE'] <= 83) & 
     (fire_map_data['LONGITUDE'] >= -141) & (fire_map_data['LONGITUDE'] <= -52)
 ]
+
+# Calculate total hectares burned
+total_burned_mil = sum(fire_map_data['SIZE_HA'])/1000000
 
 # Create base choropleth figure
 fig = px.choropleth(
@@ -72,24 +75,12 @@ fig.update_geos(
     showland=False, 
     showlakes=False, 
     subunitcolor='white',
-    center={"lat": 62, "lon": -90},
+    center={"lat": 61, "lon": -91},
     projection_scale=2.65
 )
 
 # Province border styling
 fig.update_traces(marker=dict(line=dict(color='white', width=0.2)))
-
-fig.add_trace(
-    go.Choropleth(
-        geojson=geojson_data,
-        locations=["British Columbia"],
-        z=[1], 
-        featureidkey="properties.name",
-        colorscale=[[0, "rgba(0, 0, 0, 0)"], [1, "rgba(0, 0, 0, 0)"]], 
-        marker=dict(line=dict(color="white", width=0.7)),
-        showscale=False,
-    )
-)
 
 # Add fire location points
 fig.add_trace(
@@ -99,12 +90,20 @@ fig.add_trace(
         mode='markers',
         hoverinfo='skip',
         marker=dict(
-            size=1, color='#f77b07', symbol='circle', opacity=0.2
+            size=1.5, color='#f77b07', symbol='circle', opacity=0.2
         )
     )
 )
 
-
+# Add text into map
+fig.add_annotation(
+    text=f"<span style='color: #f77b07; font-size: 96px; font-family: Arial Black, Gadget, sans-serif'>{total_burned_mil:.0f}</span><br>"
+         f"<span style='color: rgba(255, 255, 255, 0.6); font-size: 14px; font-family: Arial, sans-serif;'>Million Hectares of Land<br>Burned Over the Last 10 Years</span>",
+    x=0.553, y=0.49,  
+    xref="paper", yref="paper",
+    showarrow=False,
+    bgcolor="rgba(0, 0, 0, 0)"
+)
 
 # Initialize Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
