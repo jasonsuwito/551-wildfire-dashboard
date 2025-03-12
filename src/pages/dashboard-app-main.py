@@ -237,13 +237,12 @@ def filter_master_fire_df(year_range, province):
 
 
 # === MAP CALLBACK ===
-@dash.callback(
+@app.callback(
     Output("fire-map", "figure"),
     [Input("feature-dropdown", "value"),
      Input("year-slider", "value"),
      Input("province-dropdown", "value")]
 )
-
 def update_map(selected_feature, selected_year_range, selected_province):
     """Generate and update a wildfire map based on the selected feature and year range."""
         
@@ -251,7 +250,8 @@ def update_map(selected_feature, selected_year_range, selected_province):
     filtered_df = filter_master_fire_df(selected_year_range, selected_province)
 
     category_orders = {
-        'MONTH': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+        'MONTH': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+        'CAUSE': ["Human", "Natural", "Unknown"]
     }
     
     if selected_feature == "SIZE_HA":
@@ -271,8 +271,29 @@ def update_map(selected_feature, selected_year_range, selected_province):
         )
 
     elif selected_feature in ["CAUSE", "RESPONSE", "MONTH"]:
+        # Drop rows where MONTH == 0
+        filtered_df = filtered_df[filtered_df["MONTH"] != 0]
         if selected_feature == "MONTH":
             filtered_df['MONTH'] = filtered_df['MONTH'].astype(str)  # Convert to string for categorical
+
+        # Define color mappings
+        color_scheme = {
+            "MONTH": [
+                "#1F78B4", "#6AAED6", "#A6CEE3", "#FEE08B", "#FE9929", "#FD8D3C", 
+                "#E41A1C", "#FC4E2A", "#FCAE91", "#FFD92F", "#8DA0CB", "#377EB8"
+            ],  # 12 colors from blue to red to blue
+            "RESPONSE": [
+                "#D73027", "#D84B16", "#FF8C00", "#FED976", "#FEC44F", "#FCAE91"
+            ]  # 6 distinct colors for RESPONSE
+        }
+
+        # Define specific mapping for CAUSE
+        cause_color_map = {
+            "Human": "#FF8C00",    # Orange
+            "Natural": "#D84B16",  # Deep Red
+            "Unknown": "#E0E0E0"   # Grey
+        }
+    
         fig = px.scatter_mapbox(
             filtered_df,
             lat="LATITUDE",
@@ -280,9 +301,10 @@ def update_map(selected_feature, selected_year_range, selected_province):
             color=selected_feature,  # Color by categorical feature
             hover_data=["SIZE_HA", "CAUSE", "RESPONSE", "MONTH"],
             zoom=2.5,
-            color_discrete_sequence=px.colors.qualitative.Set1, 
+            color_discrete_map=cause_color_map if selected_feature == "CAUSE" else None,  # Apply mapping only for CAUSE
+            color_discrete_sequence=color_scheme.get(selected_feature) if selected_feature in ["MONTH", "RESPONSE"] else None,  # Assign colors for MONTH and RESPONSE
             mapbox_style="carto-darkmatter",
-            category_orders=category_orders  # Apply the category order for MONTH
+            category_orders=category_orders  # Ensure correct category order
         )
 
     elif selected_feature == "FID":
@@ -295,6 +317,7 @@ def update_map(selected_feature, selected_year_range, selected_province):
             color="FID",  # Apply color mapping for fire count
             hover_data=["FID"],
             zoom=2.5,
+            color_continuous_scale="Reds",
             mapbox_style="carto-darkmatter"
         )
 
@@ -313,6 +336,7 @@ def update_map(selected_feature, selected_year_range, selected_province):
     )
     
     return fig
+
 
 
 # === CAUSE PIE CHART CALLBACK ===
