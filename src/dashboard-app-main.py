@@ -65,8 +65,8 @@ app.layout = dbc.Container(
     [
         # Header
         dbc.Row([
-            dbc.Col(html.H3("🇨🇦 Canada Wildfire Dashboard",
-                    style={"color": "#333333", "textAlign": "left", "padding": "15px", "fontWeight": "bold"}),
+            dbc.Col(html.H2("🇨🇦 Canada Wildfire Dashboard",
+                    style={"color": "#333333", "textAlign": "left", "padding": "5px", "fontWeight": "bold"}),
                     width=12,
                     className="mx-auto",
                     style={"background": "linear-gradient(to right, #ffde59, #ff914d)", "padding": "10px", "margin": "10px"})
