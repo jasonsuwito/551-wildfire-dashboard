@@ -1,0 +1,45 @@
+
+/* DROPDOWN CUSTOM CSS */
+
+/* Style the dropdown main box */
+.custom-dropdown .Select-control {
+    background-color: #FBB03B !important; /* Dark background */
+    border: 0px
+}
+
+/* Style the dropdown options (list items) */
+.custom-dropdown .Select-menu-outer {
+    background-color: #333333 !important; /* Darker background for dropdown */
+    border: 0px
+}
+
+/* Style selected dropdown item */
+.custom-dropdown .Select-value {
+    color: #FBB03B !important; /* Yellow text */
+}
+
+
+
+/* SLIDER CUSTOM CSS */
+
+/* Change the active (slid) part of the track to yellow */
+.rc-slider-track {
+    background-color: #FBB03B !important;
+}
+
+/* Change the inactive (remaining) part of the track to dark gray */
+.rc-slider-rail {
+    background-color: #333333 !important;
+}
+
+/* Change the slider handle (knob) to yellow */
+.rc-slider-handle {
+    border-color: #FBB03B !important;
+    background-color: #FBB03B !important;
+}
+
+/* Change the color of the dots along the slider */
+.rc-slider-dot {
+    border-color: #FBB03B !important;
+    background-color: #FBB03B !important;
+}
