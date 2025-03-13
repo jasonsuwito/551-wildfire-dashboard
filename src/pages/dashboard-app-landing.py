@@ -55,16 +55,16 @@ fig = px.choropleth(
     featureidkey="properties.name",
     scope='north america',
     color='color',
-    color_discrete_map={"black": "#000000"},
+    color_discrete_map={"black": "#101010"},
     hover_data={'color': False, 'SRC_AGENCY': False}
 )
 
 # Layout adjustments
 fig.update_layout(
     margin={"r":0, "t":0, "l":0, "b":0},
-    geo=dict(bgcolor='#101010'),
-    plot_bgcolor='#101010',
-    paper_bgcolor='#101010',
+    geo=dict(bgcolor='#181818'),
+    plot_bgcolor='#181818',
+    paper_bgcolor='#181818',
     showlegend=False,
     dragmode=False,
     autosize=True
@@ -78,7 +78,7 @@ fig.update_geos(
     showlakes=False, 
     subunitcolor='white',
     center={"lat": 61, "lon": -91},
-    projection_scale=2.65
+    projection_scale=2.7
 )
 
 # Province border styling
@@ -99,9 +99,16 @@ fig.add_trace(
 
 # Add text into map
 fig.add_annotation(
-    text=f"<span style='color: #f77b07; font-size: 96px; font-family: Arial Black, Gadget, sans-serif'>{total_burned_mil:.0f}</span><br>"
-         f"<span style='color: rgba(255, 255, 255, 0.6); font-size: 14px; font-family: Arial, sans-serif;'>Million Hectares of Land<br>Burned Over the Last 10 Years</span>",
-    x=0.553, y=0.49,  
+    text=f"<span style='color: #f77b07; font-size: 108px; font-family: Arial Black, Gadget, sans-serif; letter-spacing: -5.5px'>{total_burned_mil:.0f} million</span><br>",
+    x=0.9, y=0.75,  
+    xref="paper", yref="paper",
+    showarrow=False,
+    bgcolor="rgba(0, 0, 0, 0)"
+)
+
+fig.add_annotation(
+    text=f"<span style='color: rgba(255, 255, 255, .6); font-size: 20px; font-family: Arial Narrow, sans-serif;'>Hectares of Land Have Been Burned Over the Last 10 Years</span>",
+    x=0.9, y=0.59,  
     xref="paper", yref="paper",
     showarrow=False,
     bgcolor="rgba(0, 0, 0, 0)"
@@ -110,7 +117,7 @@ fig.add_annotation(
 # Define home layout
 layout = dbc.Container(
     fluid=True,
-    style={"backgroundColor": "#101010", "padding": "0px", "margin": "0px", "width": "97vw", "height": "90vh"},
+    style={"backgroundColor": "#181818", "padding": "0px", "margin": "0px", "width": "97vw", "height": "90vh"},
     children=[
         dbc.Row(
             dbc.Col(
