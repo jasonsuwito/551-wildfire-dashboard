@@ -262,11 +262,16 @@ def update_map(selected_feature, selected_year_range, selected_province):
             lon="LONGITUDE",
             size="SIZE_HA",  # Circle size based on mean fire size
             color="SIZE_HA",  # Use color for continuous scale
-            hover_data=["SIZE_HA"],
             zoom=2.5,
             color_continuous_scale="Reds",  
             mapbox_style="carto-darkmatter"        
         )
+
+        fig.update_layout(
+            coloraxis_colorbar=dict(
+            title="Fire Size (HA)"
+        )
+)
 
     elif selected_feature in ["CAUSE", "MONTH"]:
         # Drop rows where MONTH == 0
@@ -319,6 +324,11 @@ def update_map(selected_feature, selected_year_range, selected_province):
             x=1
         ),
     )
+
+    fig.update_traces(
+        hovertemplate='Cause: %{customdata[0]}<br>Month: %{customdata[1]}<br>Fire Size (HA): %{customdata[2]:.2f}<br>Latitude: %{customdata[3]:.2f}<br>Longitude: %{customdata[4]:.2f}<extra></extra>',
+        customdata=filtered_df[['CAUSE', 'MONTH','SIZE_HA', 'LATITUDE', 'LONGITUDE']].values
+        )
     
     return fig
 
@@ -330,6 +340,7 @@ def update_map(selected_feature, selected_year_range, selected_province):
     [Input("year-slider", "value"),
      Input("province-dropdown", "value")]
 )
+
 def update_pie_chart(selected_year_range, selected_province):
     """Update the Pie Chart with filtered data."""
     
@@ -351,6 +362,10 @@ def update_pie_chart(selected_year_range, selected_province):
         font=dict(color=TEXT_COLOR),
         title=f"Fire Cause Distribution in {selected_province}",
         margin=dict(t=60, b=35, l=35, r=35),
+    )
+
+    fig.update_traces(
+        hovertemplate='Cause: %{label}<br>Count: %{value}',
     )
 
     return fig
@@ -383,8 +398,8 @@ def update_fire_count_bar(selected_year_range, selected_province):
             x=fire_count_by_province_aggregated['SRC_AGENCY'],
             y=fire_count_by_province_aggregated['count'],
             marker_color=fire_count_by_province_aggregated['SRC_AGENCY'].apply(lambda prov: '#FF8C00' if prov == highlight_prov else '#E14D2A'),
-            hoverinfo='x+y+text',
-            text=fire_count_by_province_aggregated.apply(lambda row: f"Prov: {row['SRC_AGENCY']}<br>Count: {row['count']}", axis=1),
+            hoverinfo='x+y',
+            hovertemplate='Province: %{x}<br>Count: %{y}<extra></extra>', 
             textposition="none"  # Removes text inside bars
         ))
 
@@ -431,8 +446,8 @@ def update_fire_count_bar(selected_year_range, selected_province):
             x=fire_count_by_year['YEAR'],
             y=fire_count_by_year['count'],
             marker_color=TEXT_COLOR,
-            hoverinfo='text',
-            text=fire_count_by_year.apply(lambda row: f"Year: {row['YEAR']}<br>Count: {row['count']}", axis=1),
+            hoverinfo='x+y',
+            hovertemplate='Year: %{x}<br>Count: %{y}<extra></extra>', 
             textposition="none"
         ))
 
@@ -485,7 +500,9 @@ def update_fire_size_line(selected_year_range, selected_province):
             y=prov_df['SIZE_HA'],
             mode='lines',
             name=prov,
-            line=dict(color='#FF8C00')
+            line=dict(color='#FF8C00'),
+            hoverinfo='x+y',
+            hovertemplate='Year: %{x}<br>Size (HA): %{y:.2f}<extra></extra>', 
         ))
 
     # Update layout
