@@ -155,8 +155,7 @@ layout = dbc.Container(
                                         options=[
                                             {"label": "Fire Size", "value": "SIZE_HA"},
                                             {"label": "Cause of Fire", "value": "CAUSE"},
-                                            {"label": "Response Type", "value": "RESPONSE"},
-                                            {"label": "Month", "value": "MONTH"},
+                                            {"label": "Month", "value": "MONTH"}
                                         ],
                                         placeholder="SIZE_HA",
                                         value="SIZE_HA",
@@ -269,7 +268,7 @@ def update_map(selected_feature, selected_year_range, selected_province):
             mapbox_style="carto-darkmatter"        
         )
 
-    elif selected_feature in ["CAUSE", "RESPONSE", "MONTH"]:
+    elif selected_feature in ["CAUSE", "MONTH"]:
         # Drop rows where MONTH == 0
         filtered_df = filtered_df[filtered_df["MONTH"] != 0]
         if selected_feature == "MONTH":
@@ -280,10 +279,7 @@ def update_map(selected_feature, selected_year_range, selected_province):
             "MONTH": [
                 "#1F78B4", "#6AAED6", "#A6CEE3", "#FEE08B", "#FE9929", "#FD8D3C", 
                 "#E41A1C", "#FC4E2A", "#FCAE91", "#FFD92F", "#8DA0CB", "#377EB8"
-            ],  # 12 colors from blue to red to blue
-            "RESPONSE": [
-                "#D73027", "#D84B16", "#FF8C00", "#FED976", "#FEC44F", "#FCAE91"
-            ]  # 6 distinct colors for RESPONSE
+            ]  # 12 colors from blue to red to blue
         }
 
         # Define specific mapping for CAUSE
@@ -298,11 +294,11 @@ def update_map(selected_feature, selected_year_range, selected_province):
             lat="LATITUDE",
             lon="LONGITUDE",
             color=selected_feature,  # Color by categorical feature
-            hover_data=["SIZE_HA", "CAUSE", "RESPONSE", "MONTH"],
+            hover_data=["SIZE_HA", "CAUSE", "MONTH"],
             zoom=2.5,
             size_max=0.5,
             color_discrete_map=cause_color_map if selected_feature == "CAUSE" else None,  # Apply mapping only for CAUSE
-            color_discrete_sequence=color_scheme.get(selected_feature) if selected_feature in ["MONTH", "RESPONSE"] else None,  # Assign colors for MONTH and RESPONSE
+            color_discrete_sequence=color_scheme.get(selected_feature) if selected_feature in ["MONTH"] else None,  # Assign colors for MONTH
             mapbox_style="carto-darkmatter",
             category_orders=category_orders  # Ensure correct category order
         )
