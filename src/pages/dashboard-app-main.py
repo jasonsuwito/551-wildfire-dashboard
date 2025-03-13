@@ -237,7 +237,7 @@ def filter_master_fire_df(year_range, province):
 
 
 # === MAP CALLBACK ===
-@app.callback(
+@dash.callback(
     Output("fire-map", "figure"),
     [Input("feature-dropdown", "value"),
      Input("year-slider", "value"),
