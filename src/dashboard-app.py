@@ -9,10 +9,11 @@ app = dash.Dash(
     use_pages=True
 )
 
+
 # Define main app layout
 app.layout = dbc.Container(
     fluid=True,
-    style={"backgroundColor": "#101010", "width": "100vw", "height": "100vh", "padding": "0"},
+    style={"backgroundColor": "#181818", "width": "100vw", "height": "100vh", "padding": "0"},
     children=[
         # Navigation bar stuff
         dbc.Navbar(
