@@ -32,8 +32,8 @@ master_fire_df['SIZE_HA'] = pd.to_numeric(master_fire_df['SIZE_HA'], errors='coe
 master_fire_df = master_fire_df.dropna(subset=["LATITUDE", "LONGITUDE"])
 
 # Define color scheme
-BACKGROUND_COLOR = "#292929"
-CARD_COLOR = "#333333"
+BACKGROUND_COLOR = "#181818"
+CARD_COLOR = "#242424"
 TEXT_COLOR = "#FBB03B"
 GRAPH_BG_COLOR = CARD_COLOR
 
@@ -156,7 +156,6 @@ layout = dbc.Container(
                                             {"label": "Fire Size", "value": "SIZE_HA"},
                                             {"label": "Cause of Fire", "value": "CAUSE"},
                                             {"label": "Response Type", "value": "RESPONSE"},
-                                            {"label": "Fire Count", "value": "FID"},
                                             {"label": "Month", "value": "MONTH"},
                                         ],
                                         placeholder="SIZE_HA",
@@ -221,7 +220,7 @@ layout = dbc.Container(
                 ]),
             ], width=10, className="g-0 px-0"),
         ], className="gx-0"),
-    ], fluid=True, style={"padding": "0px", "backgroundColor": '#101010'}  # No extra padding
+    ], fluid=True, style={"padding": "0px", "backgroundColor": BACKGROUND_COLOR}  # No extra padding
 )
 
 # Data Filtering Function
@@ -301,28 +300,18 @@ def update_map(selected_feature, selected_year_range, selected_province):
             color=selected_feature,  # Color by categorical feature
             hover_data=["SIZE_HA", "CAUSE", "RESPONSE", "MONTH"],
             zoom=2.5,
+            size_max=0.5,
             color_discrete_map=cause_color_map if selected_feature == "CAUSE" else None,  # Apply mapping only for CAUSE
             color_discrete_sequence=color_scheme.get(selected_feature) if selected_feature in ["MONTH", "RESPONSE"] else None,  # Assign colors for MONTH and RESPONSE
             mapbox_style="carto-darkmatter",
             category_orders=category_orders  # Ensure correct category order
         )
 
-    elif selected_feature == "FID":
-        # Count occurrences per location
-        data_agg = filtered_df.groupby(["LATITUDE", "LONGITUDE"], as_index=False).agg({"FID": "count"})
-        fig = px.scatter_mapbox(
-            data_agg,
-            lat="LATITUDE",
-            lon="LONGITUDE",
-            color="FID",  # Apply color mapping for fire count
-            hover_data=["FID"],
-            zoom=2.5,
-            color_continuous_scale="Reds",
-            mapbox_style="carto-darkmatter"
-        )
+        fig.update_traces(marker=dict(size=3))
 
     fig.update_layout(
         paper_bgcolor=GRAPH_BG_COLOR,
+        mapbox_center={"lat": 55, "lon": -101},
         margin=dict(l=0, r=0, t=0, b=0),
         legend=dict(
             font=dict(color=TEXT_COLOR),
@@ -364,7 +353,7 @@ def update_pie_chart(selected_year_range, selected_province):
     fig.update_layout(
         paper_bgcolor=GRAPH_BG_COLOR,
         font=dict(color=TEXT_COLOR),
-        title=f"Fire Cause Distribution in {selected_province} Province",
+        title=f"Fire Cause Distribution in {selected_province}",
         margin=dict(t=60, b=35, l=35, r=35),
     )
 
@@ -456,7 +445,7 @@ def update_fire_count_bar(selected_year_range, selected_province):
             plot_bgcolor=GRAPH_BG_COLOR,
             paper_bgcolor=GRAPH_BG_COLOR,
             font=dict(color=TEXT_COLOR),
-            title=f"Fire Count in {selected_province} Province by Year",
+            title=f"Fire Count in {selected_province} by Year",
             xaxis=dict(
                 title="Year",
                 tickangle=0,
@@ -508,7 +497,7 @@ def update_fire_size_line(selected_year_range, selected_province):
         plot_bgcolor=GRAPH_BG_COLOR,
         paper_bgcolor=GRAPH_BG_COLOR,
         font=dict(color=TEXT_COLOR),
-        title=f"Average Fire Size in {selected_province} Province",
+        title=f"Average Fire Size in {selected_province}",
         xaxis=dict(title=None, tickangle=0, showgrid=False, tickfont=dict(size=8, color=TEXT_COLOR)),
         yaxis=dict(title="Average Fire Size (HA)", showgrid=False, tickfont=dict(size=8, color=TEXT_COLOR)),
         margin=dict(t=60, b=35, l=35, r=35)
