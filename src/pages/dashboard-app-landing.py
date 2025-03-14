@@ -99,16 +99,21 @@ fig.add_trace(
 
 # Add text into map
 fig.add_annotation(
-    text=f"<span style='color: #f77b07; font-size: 108px; font-family: Arial Black, Gadget, sans-serif; letter-spacing: -5.5px'>{total_burned_mil:.0f} million</span><br>",
-    x=0.9, y=0.75,  
-    xref="paper", yref="paper",
-    showarrow=False,
-    bgcolor="rgba(0, 0, 0, 0)"
-)
-
-fig.add_annotation(
-    text=f"<span style='color: rgba(255, 255, 255, .6); font-size: 20px; font-family: Arial Narrow, sans-serif;'>Hectares of Land Have Been Burned Over the Last 10 Years</span>",
-    x=0.9, y=0.59,  
+    text=(
+        "<span style='color: white; font-size: 34px; font-family: Calibri; font-weight: 100;'>"
+        "In the last 10 years, over "
+        "<span style='color: #f77b07; font-weight: bold;'>45 million hectares</span> of"
+        "<br>"
+        "<br>"
+        "land has been burned by wildfires in "
+        "<span style='color: #f77b07; font-weight: bold;'>Canada</span>."
+        "<br>"
+        "<span style='font-size: 12px; color: white; font-weight: 300;'>"
+        "(Click \"Detailed View\" for more insights)"
+        "</span>"
+        "</span>"
+    ),
+    x=0.99, y=0.95,  
     xref="paper", yref="paper",
     showarrow=False,
     bgcolor="rgba(0, 0, 0, 0)"
