@@ -23,6 +23,9 @@ master_fire_df = cleaned_df
 #wildfires = pd.read_csv("final.csv")  # For map
 #wildfires = pd.read_csv("final_ca.csv")  # For map
 
+# Remove 'PC' as it is not an actual province
+master_fire_df = master_fire_df[master_fire_df['SRC_AGENCY'] != 'PC']
+
 # Ensure latitude longitude are numeric
 master_fire_df['LATITUDE'] = pd.to_numeric(master_fire_df['LATITUDE'], errors='coerce')
 master_fire_df['LONGITUDE'] = pd.to_numeric(master_fire_df['LONGITUDE'], errors='coerce')
@@ -58,6 +61,7 @@ province_options = [
     {'label': 'SK', 'value': 'SK'},
     {'label': 'YT', 'value': 'YT'}
 ]
+
 
 # Dashboard Layout
 layout = dbc.Container(
@@ -310,6 +314,7 @@ def update_map(selected_feature, selected_year_range, selected_province):
 
         fig.update_traces(marker=dict(size=3))
 
+    # Updating map features
     fig.update_layout(
         paper_bgcolor=GRAPH_BG_COLOR,
         mapbox_center={"lat": 55, "lon": -101},
@@ -325,13 +330,13 @@ def update_map(selected_feature, selected_year_range, selected_province):
         ),
     )
 
+    # Custom tooltip
     fig.update_traces(
         hovertemplate='Cause: %{customdata[0]}<br>Month: %{customdata[1]}<br>Fire Size (HA): %{customdata[2]:.2f}<br>Latitude: %{customdata[3]:.2f}<br>Longitude: %{customdata[4]:.2f}<extra></extra>',
         customdata=filtered_df[['CAUSE', 'MONTH','SIZE_HA', 'LATITUDE', 'LONGITUDE']].values
         )
     
     return fig
-
 
 
 # === CAUSE PIE CHART CALLBACK ===
@@ -364,6 +369,7 @@ def update_pie_chart(selected_year_range, selected_province):
         margin=dict(t=60, b=35, l=35, r=35),
     )
 
+    # Custom tooltip
     fig.update_traces(
         hovertemplate='Cause: %{label}<br>Count: %{value}',
     )
@@ -399,7 +405,7 @@ def update_fire_count_bar(selected_year_range, selected_province):
             y=fire_count_by_province_aggregated['count'],
             marker_color=fire_count_by_province_aggregated['SRC_AGENCY'].apply(lambda prov: '#FF8C00' if prov == highlight_prov else '#E14D2A'),
             hoverinfo='x+y',
-            hovertemplate='Province: %{x}<br>Count: %{y}<extra></extra>', 
+            hovertemplate='Province: %{x}<br>Count: %{y}<extra></extra>', # Custom tooltip
             textposition="none"  # Removes text inside bars
         ))
 
@@ -486,9 +492,9 @@ def update_fire_size_line(selected_year_range, selected_province):
 
     # Filter data based on selection
     filtered_df = filter_master_fire_df(selected_year_range, selected_province)
-
+    
     # Group by Year and Province, calculating the mean fire size
-    df_grouped = filtered_df.groupby(['YEAR', 'SRC_AGENCY'])['SIZE_HA'].mean().reset_index()
+    df_grouped = filtered_df.groupby(['YEAR', 'MONTH', 'SRC_AGENCY'])['SIZE_HA'].mean().reset_index()
 
     prov_line = go.Figure()
 
@@ -496,13 +502,14 @@ def update_fire_size_line(selected_year_range, selected_province):
     for prov in sorted(df_grouped['SRC_AGENCY'].unique()):
         prov_df = df_grouped[df_grouped['SRC_AGENCY'] == prov]
         prov_line.add_trace(go.Scatter(
-            x=prov_df['YEAR'],
+            x=prov_df['YEAR'].astype(str) + '-' + prov_df['MONTH'].astype(str), 
             y=prov_df['SIZE_HA'],
             mode='lines',
             name=prov,
             line=dict(color='#FF8C00'),
             hoverinfo='x+y',
-            hovertemplate='Year: %{x}<br>Size (HA): %{y:.2f}<extra></extra>', 
+            hovertemplate='Province: %{text}<br>Year: %{x}<br>Size (HA): %{y:.2f}<extra></extra>',
+            text=prov_df['SRC_AGENCY']
         ))
 
     # Update layout
