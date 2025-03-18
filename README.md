@@ -12,6 +12,22 @@ The dashboard includes various data visualizations, such as maps, bar charts, li
 
 Users can filter the entire dashboard based on province or year range. All elements in the dashboard dynamically update according to these global filters, ensuring an interactive and seamless data exploration experience.
 
+### Running the App:
+
+1. **Clone the repository** or download it as a ZIP and extract it.  
+   ```bash
+   git clone https://github.com/jasonsuwito/551-wildfire-dashboard.git
+   cd 551-wildfire-dashboard
+   ```
+2. **Navigate to the `src` folder**  
+   ```bash
+   cd src
+   ```
+3. **Run the dashboard app**  
+   ```bash
+   python dashboard-app.py
+   ```
+
 ### App Sketch:
 
 ![sketch-1](images/sketch-1.jpg)
