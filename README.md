@@ -2,9 +2,15 @@
 
 **Name**: Amali Jayatileke, Kiran John, Kelsey Strachan, Jason Suwito
 
-> **Our dashboard app can be found under the `src` folder with the name `dashboard-app-main.py` and `dashboard-app-landing.py`**
+> **Our dashboard app can be found under the `src` folder with the name `dashboard-app.py`**
 
-This is a GitHub repository for the BC Wildfire Dashboard app. The app is an interactive data visualization tool designed to analyze and display wildfire occurrences across Canada, with a focus on British Columbia. The landing page of the app will be a full map of Canada, showing the fires between 2013 and 2023, emphasizing the quantity of fires which occurred in BC alone. We then transition to the main dashboard showcasing our primary analysis.The dashboard will contain data visualizations that shows the distribution (bar chart, histogram, contour plot, heatmap etc) of features in the data set (fire size, location, date (year, month, day), etc.).
+This GitHub repository contains the Canadian Wildfire Analysis dashboard app. This interactive data visualization tool is designed to analyze and display wildfire occurrences across Canada.
+
+The app's landing page features a full map of Canada, displaying wildfires from 2013 to 2023, with an emphasis on the number of fires that occurred across the country. From there, users transition to the main dashboard, which showcases our primary analysis.
+
+The dashboard includes various data visualizations, such as maps, bar charts, line charts, pie charts, and summary statistics cards. These visualizations illustrate key wildfire attributes, including fire size, location, cause, and date (year, month, and day).
+
+Users can filter the entire dashboard based on province or year range. All elements in the dashboard dynamically update according to these global filters, ensuring an interactive and seamless data exploration experience.
 
 ### App Sketch:
 
