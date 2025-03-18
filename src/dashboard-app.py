@@ -5,6 +5,7 @@ from dash import html, page_container, dcc, Input, Output
 # Initialize the Dash app
 app = dash.Dash(
     __name__, 
+    title='Canadian Wildfire Analysis',
     external_stylesheets=[dbc.themes.DARKLY],
     use_pages=True
 )
